@@ -1,0 +1,161 @@
+﻿
+<!DOCTYPE html>
+<html>
+
+<head><title> Your Messages </title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="mystyle.css">
+
+</head>
+<body>
+
+<div style="position : fixed; top : 0px;" class="container">
+<form action='msging/insert.php' method='post' id='myform' >
+<div class="container">
+<div class="row">
+  <div class="col-xs-1.5">
+
+<a href='msg1.php' class='btn btn-primary'>back</a>
+</div>
+  <div class="col-xs-8.5">
+
+<input type='text' name='mymsg' placeholder='your message' />
+</div>
+
+  <div class="col-xs-2">
+
+<div id='cousername' hidden></div>
+<div id='username' hidden></div>
+<div id='firstname' hidden></div>
+
+<button id='insert'>Send</button>
+
+
+<p id='result'></p>
+</div>
+</div>
+</div>
+
+</form>
+</div>
+
+<div id="demo">
+<h1>message div </h1>
+
+<button type="button" onclick="loadDoc()">Change Content</button>
+</div>
+
+<div id="demo1">
+<h1>read message div </h1>
+
+<button type="button" onclick="loadDoc1()">Change Content</button>
+</div>
+
+
+
+
+
+<script>
+
+function GetURLParameter(sParam)
+{
+    var sPageURL = window.location.search.substring(1);
+
+    var sURLVariables = sPageURL.split('&');
+
+    for (var i = 0; i < sURLVariables.length; i++) 
+    {
+        var sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] == sParam) 
+        {
+            return sParameterName[1];
+        }
+    }
+}
+
+var cousername = GetURLParameter('cousername');
+var username = GetURLParameter('username');
+var firstname = GetURLParameter('firstname');
+
+document.getElementById('cousername').innerHTML= "<input id='cousername' name='cousername' value="+cousername+" readonly='true' ></input><br/>";
+document.getElementById('firstname').innerHTML= "<input id='firstname' name='firstname' value="+firstname+" readonly='true'></input><br/>";
+
+document.getElementById('username').innerHTML= "<input id='username' name='username' value="+username+" readonly='true'></input><br/>";
+
+
+
+
+
+$('#myform').submit(function(){
+return false;
+});
+$('#insert').click(function(){
+$.post(		
+$('#myform').attr('action'),
+$('#myform :input').serializeArray(),
+
+
+
+function(result){
+$('#result').html(result);
+}
+);
+});
+
+
+
+
+function loadDoc() {
+  var xhttp = new XMLHttpRequest();
+
+  xhttp.onreadystatechange = function() {
+
+    if (this.readyState == 4 && this.status == 200) {
+      document.getElementById("demo").innerHTML = this.responseText;
+    }
+  };
+  xhttp.open("GET", "msging/sel.php?cousername="+cousername+"&username="+username+"&firstname="+firstname, true);
+
+  xhttp.send();
+}
+
+setInterval(loadDoc, 1000);
+
+
+
+
+
+function loadDoc1() {
+  var xhttp = new XMLHttpRequest();
+
+  xhttp.onreadystatechange = function() {
+
+    if (this.readyState == 4 && this.status == 200) {
+      document.getElementById("demo1").innerHTML =
+      this.responseText;
+    }
+  };
+  xhttp.open("GET", "msging/insertread.php?cousername="+cousername+"&username="+username+"&firstname="+firstname, true);
+
+  xhttp.send();
+}
+
+setInterval(loadDoc1, 1000);
+
+
+</script>
+</body>
+</html>
